@@ -2,12 +2,13 @@ const { createApp, ref, reactive, computed, watch } = Vue;
 const { Platform, useQuasar, copyToClipboard } = Quasar;
 
 var vueObject = {
-name: 'root',
-template:
-/*html*/
-`
-<q-btn color="white" text-color="black" label="Standard" @click="auau"/>
-<q-btn color="white" text-color="black" label="Standard" @click="autogrow.val=false"/>
+  name: 'root',
+  template:
+    /*html*/
+    `
+    {{autogrow_}}
+    {{mega.comment}}
+<q-btn color="white" text-color="black" label="Standard" @click="autogrow_off"/>
 
 <q-layout view="hHh lpR fFf">
   <q-page-container>
@@ -66,7 +67,7 @@ template:
               <q-icon name="chat" />
             </template>
           </q-input> -->
-        <q-input label="Комментарий" v-model="mega.comment" ref="rrr" type="textarea" :autogrow="autogrow.val" @focus="autogrow.val=true" @blur="">
+        <q-input label="Комментарий" v-model="mega.comment" type="textarea" :autogrow="autogrow_" @focus="autogrow_ = true" @blur="autogrow_ = false">
           <template v-slot:prepend>
             <q-icon name="chat" />
           </template>
@@ -141,77 +142,80 @@ template:
   <!-- <q-tooltip v-model="showing" :no-parent-event="true" :transition-duration=500>{{addr}}</q-tooltip> -->
 </q-layout>
 `
-,
-setup() {
-let autogrow = ref({val: false});
-let mega = reactive({
-autogrow: model.autogrow,
-address: model.address,
-id: model.id,
-email: model.email,
-phone: model.phone,
-status: model.status,
-comment: model.comment,
-name: model.name,
-manager: model.manager,
-project_manager: model.project_manager,
-engineer: model.engineer,
-measurer: model.measurer,
-worker: model.worker,
-agreetor: model.agreetor,
-project_type: model.project_type,
-district: model.district,
-folder: model.folder,
-addressOptions: model.addressOptions
-});
-const $q = useQuasar();
+  ,
+  setup() {
+    let autogrow_ = ref(false);
+    let mega = reactive({
+      address: model.address,
+      id: model.id,
+      email: model.email,
+      phone: model.phone,
+      status: model.status,
+      comment: model.comment,
+      name: model.name,
+      manager: model.manager,
+      project_manager: model.project_manager,
+      engineer: model.engineer,
+      measurer: model.measurer,
+      worker: model.worker,
+      agreetor: model.agreetor,
+      project_type: model.project_type,
+      district: model.district,
+      folder: model.folder,
+      addressOptions: model.addressOptions
+    });
+    const $q = useQuasar();
 
-function auau(){
-  console.log($refs);
-  this.$refs.rrr.focus();
-  autogrow.val = false;
-}
+    function autogrow_off() {
+      console.log('dd');
+      autogrow_ = false;
+      let v = mega.comment;
+      console.log(v);
+      mega.comment = {'v':"s"};
+      autogrow_ = false;
+      mega.comment = v;
+    }
 
-function filteraddressFn(val, update) {
-if (val === '') {
-update(() => {
-mega.addressOptions = model.addressOptions;
-})
-return;
-}
-update(() => {
-const needle = val.toLowerCase()
-mega.addressOptions = model.addressOptions.filter(v => {
-let arneed = needle.split(' ');
-if (arneed.every(ar => v.address.toLowerCase().includes(ar))) {
-return v
-}
-});
+    function filteraddressFn(val, update) {
+      if (val === '') {
+        update(() => {
+          mega.addressOptions = model.addressOptions;
+        })
+        return;
+      }
+      update(() => {
+        const needle = val.toLowerCase()
+        mega.addressOptions = model.addressOptions.filter(v => {
+          let arneed = needle.split(' ');
+          if (arneed.every(ar => v.address.toLowerCase().includes(ar))) {
+            return v
+          }
+        });
 
-})
-}
+      })
+    }
 
-function abortFilterFn() {
-console.log('delayed filter aborted')
-}
+    function abortFilterFn() {
+      console.log('delayed filter aborted')
+    }
 
-return {
-  autogrow,
-mega,
-abortFilterFn,
-filteraddressFn,
-auau
-}
-}
+    return {
+      autogrow_,
+      mega,
+      abortFilterFn,
+      filteraddressFn,
+      autogrow_off
+    }
+  }
 }
 
 const app = Vue.createApp(vueObject);
 app.use(Quasar, {
-config: {
-notify: { timeout: 500 },
-loading: { /* look at QuasarConfOptions from the API card */ },
-plugins: ['Meta']
-}
+  config: {
+    notify: { timeout: 500 },
+    loading: { /* look at QuasarConfOptions from the API card */ },
+    plugins: ['Meta']
+  }
 });
 
 Quasar.lang.set(Quasar.lang.ru);
