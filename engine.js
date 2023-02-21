@@ -53,7 +53,9 @@ async function getSheets(spreadSheetId_) {
 // avocado-368421.mydataset.mytable
 
 async function getDataBQ() {
+  console.log('getDataBQ');
   await getAccessToken();
+  // "query": "SELECT address, phone FROM `avocado-368421.pereplan.pereplan_table` where regexp_contains(address, r'(?i)(мич.*7)');",
   let request = {
     "query": "SELECT address, phone FROM `avocado-368421.pereplan.pereplan_table` where regexp_contains(address, r'(?i)(мич.*7)');",
     "useLegacySql": false

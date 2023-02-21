@@ -6,21 +6,17 @@ var vueObject = {
   template:
     /*html*/
     `
-    {{autogrow_}}
-    {{mega.comment}}
-<q-btn color="white" text-color="black" label="Standard" @click="autogrow_off"/>
+<!-- <q-btn color="white" text-color="black" label="Standard" @click="" /> -->
 
 <q-layout view="hHh lpR fFf">
+
   <q-page-container>
 
-    <div class="q-pa-md fit column justify-center">
-
-      <div class="q-gutter-y-xs"> <!--style="height:220px"-->
+    <div class="q-pa-md fit column">
 
         <!-- ADDRESS-->
-        <q-select v-model="mega.address.val" use-input input-debounce="0" label="Адрес" :options="mega.addressOptions"
-          @filter="filteraddressFn" @filter-abort="abortFilterFn" behavior="menu">
-          <template v-slot:prepend><q-icon name="location_on"></q-icon></template>
+        <q-select @update:model-value="vall => gueryBQ(vall)" v-model="mega.address.val" use-input input-debounce="0" label="Адрес" :options="mega.addressOptions" @filter="filteraddressFn" @filter-abort="abortFilterFn" behavior="menu">
+          <template v-slot:prepend><q-icon name="location_on" @click.native="openUrl('https://yandex.ru/maps/?source=serp_navig&text='+mega.address.val)"></q-icon></template>
           <template v-slot:no-option>
             <q-item>
               <q-item-section class="text-grey">
@@ -30,11 +26,8 @@ var vueObject = {
           </template>
         </q-select>
 
-      </div>
 
       <!-- OBJECT -->
-      <div class="q-gutter-y-xs"> <!--style="height:220px"-->
-
         <!-- ID -->
         <q-field label="Id" bottom-slots stack-label class="q-pr-md" :dense="true">
           <template v-slot:before><q-icon name="123"></q-icon></template>
@@ -61,81 +54,72 @@ var vueObject = {
         </q-field>
 
         <!-- COMMENT -->
-        <!-- <div class="q-pa-md" style="height: 100px"> -->
-        <!-- <q-input v-model="mega.comment" label="Комментарий" autogrow>
+          <q-input label="Комментарий" v-model="mega.comment" :autogrow="autogrow_" @focus="autogrow_=true" @blur="autogrow_=false">
             <template v-slot:prepend>
               <q-icon name="chat" />
             </template>
-          </q-input> -->
-        <q-input label="Комментарий" v-model="mega.comment" type="textarea" :autogrow="autogrow_" @focus="autogrow_ = true" @blur="autogrow_ = false">
-          <template v-slot:prepend>
-            <q-icon name="chat" />
-          </template>
-        </q-input>
-        <!-- </div> -->
+          </q-input>
 
         <!-- NAME -->
         <q-field label="Имя" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+          <template v-slot:before><q-icon name="face"></q-icon></template>
+          <template v-slot:control>{{mega.name}}</template>
         </q-field>
 
         <!-- MANAGER -->
-        <q-field label="Стадия" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+        <q-field label="Менеджер" bottom-slots stack-label class="q-pr-md" :dense="true">
+          <template v-slot:before><q-icon name="person"></q-icon></template>
+          <template v-slot:control>{{mega.manager}}</template>
         </q-field>
 
         <!-- PROJECT_MANAGER -->
-        <q-field label="Стадия" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+        <q-field label="Проектный менеджер" bottom-slots stack-label class="q-pr-md" :dense="true">
+          <template v-slot:before><q-icon name="record_voice_over"></q-icon></template>
+          <template v-slot:control>{{mega.project_manager}}</template>
         </q-field>
 
         <!-- ENGINEER -->
-        <q-field label="Стадия" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+        <q-field label="Инженер" bottom-slots stack-label class="q-pr-md" :dense="true">
+          <template v-slot:before><q-icon name="manage_accounts"></q-icon></template>
+          <template v-slot:control>{{mega.engineer}}</template>
         </q-field>
 
         <!-- MEASURER -->
-        <q-field label="Стадия" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+        <q-field label="Обмерщик" bottom-slots stack-label class="q-pr-md" :dense="true">
+          <template v-slot:before><q-icon name="person_search"></q-icon></template>
+          <template v-slot:control>{{mega.measurer}}</template>
         </q-field>
 
         <!-- WORKER -->
-        <q-field label="Стадия" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+        <q-field label="Исполнитель" bottom-slots stack-label class="q-pr-md" :dense="true">
+          <template v-slot:before><q-icon name="person_4"></q-icon></template>
+          <template v-slot:control>{{mega.worker}}</template>
         </q-field>
 
         <!-- AGREETOR -->
-        <q-field label="Стадия" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+        <q-field label="Согласователь" bottom-slots stack-label class="q-pr-md" :dense="true">
+          <template v-slot:before><q-icon name="handshake"></q-icon></template>
+          <template v-slot:control>{{mega.agreetor}}</template>
         </q-field>
 
         <!-- PROJECT_TYPE -->
-        <q-field label="Стадия" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+        <q-field label="Тип" bottom-slots stack-label class="q-pr-md" :dense="true">
+          <template v-slot:before><q-icon name="grid_view"></q-icon></template>
+          <template v-slot:control>{{mega.project_type}}</template>
         </q-field>
 
         <!-- DISTRICT -->
-        <q-field label="Стадия" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+        <q-field label="Округ" bottom-slots stack-label class="q-pr-md" :dense="true">
+          <template v-slot:before><q-icon name="layers"></q-icon></template>
+          <template v-slot:control>{{mega.district}}</template>
         </q-field>
 
         <!-- FOLDER -->
-        <q-field label="Стадия" bottom-slots stack-label class="q-pr-md" :dense="true">
-          <template v-slot:before><q-icon name="flag"></q-icon></template>
-          <template v-slot:control>{{mega.status}}</template>
+        <q-field label="Папка" bottom-slots stack-label class="q-pr-md" :dense="true">
+          <template v-slot:before><q-icon name="folder" @click.native="openUrl(mega.folder)"></q-icon></template>
+          <!-- <template v-slot:control>{{mega.folder}}</template> -->
         </q-field>
-
-      </div>
-
+ 
     </div>
 
   </q-page-container>
@@ -145,6 +129,7 @@ var vueObject = {
   ,
   setup() {
     let autogrow_ = ref(false);
+
     let mega = reactive({
       address: model.address,
       id: model.id,
@@ -165,16 +150,6 @@ var vueObject = {
       addressOptions: model.addressOptions
     });
     const $q = useQuasar();
-
-    function autogrow_off() {
-      console.log('dd');
-      autogrow_ = false;
-      let v = mega.comment;
-      console.log(v);
-      mega.comment = {'v':"s"};
-      autogrow_ = false;
-      mega.comment = v;
-    }
 
     function filteraddressFn(val, update) {
       if (val === '') {
@@ -199,12 +174,60 @@ var vueObject = {
       console.log('delayed filter aborted')
     }
 
+    function openUrl(url) {
+      window.open(url);
+    }
+
+    function address_selected(vall) {
+      gueryBQ(vall.label);
+    }
+
+    async function gueryBQ(address) {
+      console.log(address);
+      await getAccessToken();
+      let request = {
+        "query": "SELECT id, email, phone, status, comment, name, manager, project_manager, engineer, measurer, worker, agreetor, project_type, district, folder FROM `avocado-368421.pereplan.pereplan_table` where address ='" + address.label + "';",
+        "useLegacySql": false
+      };
+      let url = 'https://bigquery.googleapis.com/bigquery/v2/projects/avocado-368421/queries';
+      let res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${at}`
+        },
+        body: JSON.stringify(request)
+      })
+        .then(response => response.json());
+
+      let rows = res.rows[0].f;
+      let arr = rows.map(item => item.v);
+
+      mega.id = arr[0];
+      mega.email = arr[1];
+      mega.phone = arr[2];
+      mega.status = arr[3];
+      mega.comment = arr[4];
+      mega.name = arr[5];
+      mega.manager = arr[6];
+      mega.project_manager = arr[7];
+      mega.engineer = arr[8];
+      mega.measurer = arr[9];
+      mega.worker = arr[10];
+      mega.agreetor = arr[11];
+      mega.project_type = arr[12];
+      mega.district = arr[13];
+      mega.folder = arr[14];
+    }
+
     return {
       autogrow_,
       mega,
       abortFilterFn,
       filteraddressFn,
-      autogrow_off
+      openUrl,
+      address_selected,
+      gueryBQ
     }
   }
 }

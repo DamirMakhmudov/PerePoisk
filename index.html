@@ -18,8 +18,8 @@
 </head>
 
 <body>
-  <input value="click Sheets" type="button" onclick="getSh()">
-  <input value="click BQ" type="button" onclick="getBQ()">
+  <!-- <input value="click Sheets" type="button" onclick="getSh()"> -->
+  <!-- <input value="click BQ" type="button" onclick="getBQ()"> -->
 
   <div id="q-app"></div>
 
@@ -32,10 +32,11 @@
 
   <!-- Import JS -->
   <script src="./data.js"></script>
+  <!-- <?!= include("data.js") ?> -->
 
   <!-- Import components -->
   <script src="./root.vue"></script>
-  <!-- <script src="./position.js"></script> -->
+  <!-- <?!= include("root.vue") ?> -->
 
   <!-- Mount app -->
   <script>const vm = app.mount('#q-app')</script>
